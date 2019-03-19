@@ -1,11 +1,5 @@
-.gradle/
-.idea/
-classes/
-build/
-derby.log
-*.class
-*.jar
-*.lock
-*.iml
+# Ignore Gradle project-specific cache directory
+.gradle
 
-
+# Ignore Gradle build output directory
+build
