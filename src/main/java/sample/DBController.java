@@ -24,6 +24,10 @@ public class DBController {
         // TODO implement
     }
 
+    public static void close() {
+        // TODO implement
+    }
+
     public void insertHistory(String input, String output) {
         // TODO implement
     }
@@ -35,6 +39,10 @@ public class DBController {
 
     public ArrayList<String> getRecentHistory() {
         // TODO implement
+        return null;
+    }
+
+    public String getName() {
         return null;
     }
 }
