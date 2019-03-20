@@ -90,8 +90,11 @@ integrationTest {
 
 test {
     useJUnit {
+        includeCategories 'testclassifications.FastTest'
+        includeCategories 'testclassifications.SlowTest'
+        includeCategories 'testclassifications.UiTest'
+        includeCategories 'testclassifications.IntegrationTest'
         excludeCategories 'testclassifications.LocalTest'
-        excludeCategories 'testclassifications.IntegrationTest'
     }
 }
 
