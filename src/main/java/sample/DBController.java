@@ -81,6 +81,8 @@ public class DBController {
             history.add(results.getString(2) + results.getString(3));
         }
 
+        results.close();
+
         return history;
     }
 
