@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import testclassifications.FastTest;
 
+import java.sql.SQLException;
+
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.hamcrest.Matchers.nullValue;
@@ -15,7 +17,7 @@ public class DBControllerInitializationTest {
 
     @Category(FastTest.class)
     @Test
-    public void init() {
+    public void init() throws SQLException {
         // This test wouldn't be valid if myDBC already had a value, so check this first
         assertThat(DBController.myDBC, is(nullValue()));
 
@@ -35,7 +37,7 @@ public class DBControllerInitializationTest {
 
     @Category(FastTest.class)
     @Test
-    public void named_init() {
+    public void named_init() throws SQLException {
         // This test wouldn't be valid if myDBC already had a value, so check this first
         assertThat(DBController.myDBC, is(nullValue()));
 
