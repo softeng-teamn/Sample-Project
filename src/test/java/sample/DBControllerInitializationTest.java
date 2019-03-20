@@ -3,6 +3,8 @@ package sample;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
+import testclassifications.FastTest;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
@@ -11,6 +13,7 @@ import static org.hamcrest.junit.MatcherAssert.assertThat;
 
 public class DBControllerInitializationTest {
 
+    @Category(FastTest.class)
     @Test
     public void init() {
         // This test wouldn't be valid if myDBC already had a value, so check this first
@@ -30,6 +33,7 @@ public class DBControllerInitializationTest {
         assertThat(DBController.myDBC, is(nullValue()));
     }
 
+    @Category(FastTest.class)
     @Test
     public void named_init() {
         // This test wouldn't be valid if myDBC already had a value, so check this first
