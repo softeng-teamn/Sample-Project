@@ -26,7 +26,7 @@ public class DBControllerInitializationTest {
 
         // Verify that myDBC now has a value and has the correct name
         assertThat(DBController.myDBC, is(notNullValue()));
-        assertThat(DBController.myDBC.getName(), is("calc-db"));
+        assertThat(DBController.myDBC.getName(), is("calc-db-test"));
 
         // Attempt to close
         DBController.close();
@@ -41,7 +41,7 @@ public class DBControllerInitializationTest {
         // This test wouldn't be valid if myDBC already had a value, so check this first
         assertThat(DBController.myDBC, is(nullValue()));
 
-        String dbName = "calc-db-test";
+        String dbName = "calc-db-test-2";
 
         // Attempt to initialize
         DBController.init(dbName);
