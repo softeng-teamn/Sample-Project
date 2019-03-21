@@ -9,6 +9,7 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptException;
 import java.io.IOException;
 import java.io.InvalidObjectException;
+import java.sql.SQLException;
 
 public class Controller {
 
@@ -28,11 +29,12 @@ public class Controller {
 
 
     @FXML
-    private void btnPressed(ActionEvent event) {
+    private void btnPressed(ActionEvent event) throws SQLException {
         Button btn = (Button) event.getSource();
         String id = btn.getText();
         switch (id) {
             case "=":
+                String operation = this.mathString;
                 try {
                     // Try to compute answer
                     Double displayNum = computeEngine(this.mathString);
@@ -49,7 +51,8 @@ public class Controller {
                     // Show error
                     this.mathString = "That not math tho...";
                 }
-
+                // Call to database
+                DBController.myDBC.insertHistory(operation, this.mathString);
                 break;
             case "C":
                 // Clear value
