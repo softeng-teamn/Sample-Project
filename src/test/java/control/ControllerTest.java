@@ -5,7 +5,6 @@ import javafx.scene.control.Button;
 import org.junit.ClassRule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
-import sun.jvm.hotspot.utilities.Assert;
 import testclassifications.FastTest;
 import javax.script.ScriptException;
 
