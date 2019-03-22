@@ -4,6 +4,7 @@ jdk:
 
 before_install:
   - chmod +x gradlew
+  - sudo apt-get install -y sshpass
 
 before_script:
   - "export DISPLAY=:99.0"
