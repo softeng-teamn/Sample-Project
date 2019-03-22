@@ -19,11 +19,11 @@ jobs:
     - if: branch != master AND branch != dev
       script: ./gradlew clean fastTest uiFastTest spotbugsMain spotbugsTest
 
-after_script:
-  zip -r build_artifacts.zip ./testfx-test*.png ./build/reports/*
+env:
+  global:
+    - secure: "ICZfEWvRPZiE550+vDLS/vkfH7W+Q0aQePJuSl5YgBEjP1/t/MU+YKBaTQBmV55rWcEH6AX/KhHW9+qFT7w+NyxkXz7z5VwK9CgaI3DzJ90CaATf3qSGVdew1GlNvYCcnsU2jR50Phjjw2+FzZrtGqMnXFbrdn4DoHaxn0hJ1tGBjWaI6PnfSzPy9f8dQ/CjeB2YqUA6P7xG6mILxHKfdyVih8YUAQpf8H1GN1RfZxr2wuw4FYvNGsf5jC3hR5kOnZAg3gxqGSRagHE7nsUfcPOpip5c55Owk7EmPkX9EEQ9RS9vZQHhw/UlmkdOXrrPu3zLp38iXEVDiXN7o/a6rhpri27sofErwPelhTbyODqEv5XXLdxASIn5RVczvHekOZmDkd7t/dFynzo8ajoufDGpeTFWuH/qMziwEiMr+5ip3r5uep95Ot0JwHzoeogU7kYME1ncrQUoAiuIQJW5f1Wggue9CWF0/NKmALN0crdHaEyVDkj9NeJcVtEABBkIHiyY0CuTz7E2miCdu3UXvSIJT2Afp/79XWW3e65ktamLrABwqCcsrQiDlev6grV7QGU+w0THEICnmj5Zqit3UqMkhVgDJ3krtWzylMbtsQIhyr/sGqmfuXMKUbqVZJBKkVIQgxvqVJ5cUcBQnhDiNeXALqRDa7F2M7UbbBSctis="
+    - secure: "vEyQEtwDLwLCfr+CWGLV3+D6nmGmcTqrmsgVg5ABCDOi/liNta/JSP7F9AhrkoKm0MCk3z8DbQDRcE5TI78Mjs2jy1eSdzMwOIWu7gh0bTSAga4rL8fTEWsZ4WkHo/D2kcGCSnW3Qv4kkH3+KblvdkP8kK6LJEmWAcLbvEnFE3oe8gNkcPTBhC2Z8Ogi8Us1wOG5KudNP0ToeAHQKVSBG0/AVabcThI+iMlU9g/uPU66OFHH/OdI2N59DgM2HpTbF+9eBSzR5solDbNWSWLZi5AiKC+LtAhTGVaOhygYDv+7O//0O+KvxkR1RzijUt6C4kiBuigCpg1wD3INP1I4eLDQIDaE4Dmji27XIP5VCK8IwMyRnjQagrncVyZNqlYm2VJ9iwmW0BjH5NNGyH7dizWhdWuaXlFK2ScEVuHS2+BkGzlbq4EiOlLR3/6xffJ5n3aKz66FZwXGvysavnnJn9QtAmm6U5hP867mF9OGsM2EIF4tOZPlAx8XZDZucBiDP2dAD8RQKngjoV338+u3Tr/rLwqWdF0Ir9sPeFsfRs+iLw6vnkeGailoY5OIk6PruI1mz1p0sqhp1sFcL1+L/0fLfAslQDDIHX/UGW4rsucLs6E5JkNwnsJ1X65OrtP49bGjByt0377qyOaK1rD2dg3OyzO1jFChuMnPeHMzZMc="
 
-addons:
-  artifacts:
-    s3_region: "us-east-1"
-    paths:
-      - build_artifacts.zip
+after_script:
+  - zip -r build_artifacts_${TRAVIS_JOB_NUMBER}.zip ./testfx-test*.png ./build/reports/*
+  - sshpass -p ${SFTP_PASSWORD} scp -o StrictHostKeyChecking=no build_artifacts_${TRAVIS_JOB_NUMBER}.zip ${SFTP_USER}@ravana.dyn.wpi.edu:public_html/${TRAVIS_REPO_SLUG}/
