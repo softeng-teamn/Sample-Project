@@ -13,11 +13,11 @@ before_script:
 jobs:
   include:
     - if: branch = master
-      script: ./gradlew clean check
+      script: ./gradlew clean check spotbugsMain spotbugsTest
     - if: branch = dev
-      script: ./gradlew clean check
+      script: ./gradlew clean check spotbugsMain spotbugsTest
     - if: branch != master AND branch != dev
-      script: ./gradlew clean fastTest uiFastTest
+      script: ./gradlew clean fastTest uiFastTest spotbugsMain spotbugsTest
 
 after_script:
   zip -r build_artifacts.zip ./testfx-test*.png ./build/reports/*

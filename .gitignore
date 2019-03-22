@@ -9,3 +9,4 @@ derby.log
 *.lock
 *.iml
 *db*/
+testfx-test*.png

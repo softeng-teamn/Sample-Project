@@ -4,11 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class DBController {
-
-    private static final int DEFAULT_QUANTITY = 10;
-
-    // Note: DB
-    public static DBController myDBC;
+    static DBController myDBC;
 
     private Connection connection;
     private String name;
@@ -25,11 +21,17 @@ public class DBController {
         if (!this.tableExists("ENTRIES")) {
             Statement statement = connection.createStatement();
 
-            statement.execute("CREATE TABLE ENTRIES (ID INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), USER_INPUT VARCHAR(50), USER_OUTPUT VARCHAR(50))");
+            try {
+                statement.execute("CREATE TABLE ENTRIES (ID INT NOT NULL PRIMARY KEY GENERATED ALWAYS AS IDENTITY (START WITH 1, INCREMENT BY 1), USER_INPUT VARCHAR(50), USER_OUTPUT VARCHAR(50))");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
+            statement.close();
         }
     }
 
-    public static void init(String name) throws SQLException {
+    static void init(String name) throws SQLException {
         DriverManager.registerDriver(new org.apache.derby.jdbc.EmbeddedDriver());
         Connection connection = DriverManager.getConnection("jdbc:derby:" + name + ";create=true");
 
@@ -46,40 +48,66 @@ public class DBController {
     }
 
     public void dropAll() throws SQLException {
-        Statement statement = myDBC.connection.createStatement();
-
         if (tableExists("ENTRIES")) {
-            statement.execute("DROP TABLE ENTRIES");
+            Statement statement = myDBC.connection.createStatement();
+            try {
+                statement.execute("DROP TABLE ENTRIES");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            statement.close();
         }
     }
 
-    public void insertHistory(String input, String output) throws SQLException {
+    void insertHistory(String input, String output) throws SQLException {
         PreparedStatement statement = connection.prepareStatement("INSERT INTO ENTRIES (USER_INPUT, USER_OUTPUT) VALUES (?, ?)");
 
-        statement.setString(1, input);
-        statement.setString(2, output);
+        try {
+            statement.setString(1, input);
+            statement.setString(2, output);
 
-        statement.execute();
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        statement.close();
     }
 
-    public ArrayList<String> getRecentHistory(int quantity) throws SQLException {
+    ArrayList<String> getRecentHistory(int quantity) throws SQLException {
+        ArrayList<String> history = new ArrayList<>();
+
         PreparedStatement statement;
+
+        // If quantity is >0, attempt to return that many entries
+        // Otherwise, return all entries
         if (quantity > 0) {
             statement = connection.prepareStatement("SELECT * FROM ENTRIES ORDER BY ID DESC FETCH NEXT ? ROWS ONLY");
 
-            statement.setInt(1, quantity);
+            try {
+                statement.setInt(1, quantity);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                statement.close();
+                return history;
+            }
         } else {
             statement = connection.prepareStatement("SELECT * FROM ENTRIES ORDER BY ID DESC");
         }
 
-        ResultSet results = statement.executeQuery();
-        ArrayList<String> history = new ArrayList<>();
+        try {
+            ResultSet results = statement.executeQuery();
 
-        while (results.next()) {
-            history.add(results.getString(2) + results.getString(3));
+            while (results.next()) {
+                history.add(results.getString(2) + results.getString(3));
+            }
+
+            results.close();
+
+        } catch(SQLException e) {
+            e.printStackTrace();
         }
-
-        results.close();
+        statement.close();
 
         return history;
     }

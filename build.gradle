@@ -1,3 +1,16 @@
+plugins {
+    id "com.github.spotbugs" version "1.7.1"
+}
+spotbugs {
+    toolVersion = '3.1.12'
+}
+
+// To generate an HTML report instead of XML
+tasks.withType(com.github.spotbugs.SpotBugsTask) {
+    reports.xml.enabled = false
+    reports.html.enabled = true
+}
+
 version '0.1'
 
 apply plugin: 'java'
